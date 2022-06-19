@@ -1,8 +1,13 @@
  var app = require('./config/app');
  var express = require('express');
  var http = require('http');
+ var configDB = require('./config/db');
+ let passport = require("passport");
 
- 
+//passport config
+require("./config/passport")(passport);
+
+ var db = configDB();
  var port = normalizePort(process.env.PORT || '3000');
  app.set('port', port);
 app.use( express.static( "public" ) ); 
@@ -67,6 +72,10 @@ app.use( express.static( "public" ) );
        throw error;
    }
  }
+
+ //passport session middleware
+app.use(passport.initialize());
+app.use(passport.session());
  
  /**
   * Event listener for HTTP server "listening" event.
